@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Column, Double, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { PlatoEntity } from 'src/plato/plato.entity/plato.entity';
 
 @Entity()
@@ -12,15 +12,16 @@ export class RestauranteEntity {
     nombre: string;
 
     @Column()
-    descripción: string;
+    direccion: string;
 
     @Column()
-    precio: Double;
+    tipoCocina: string;
 
     @Column()
-    categoria: string;
+    paginaWeb: string;
 
     @ManyToMany(() => PlatoEntity, plato => plato.restaurantes)
+    @JoinTable()
     platos: PlatoEntity[];
 
 }

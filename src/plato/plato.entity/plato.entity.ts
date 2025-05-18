@@ -2,6 +2,13 @@
 import { RestauranteEntity } from 'src/restaurante/restaurante.entity/restaurante.entity';
 import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
 
+export enum CategoriaPlato {
+    ENTRADA = 'entrada',
+    PLATO_FUERTE = 'plato fuerte',
+    POSTRE = 'postre',
+    BEBIDA = 'bebida'
+}
+
 @Entity()
 export class PlatoEntity {
 
@@ -12,13 +19,18 @@ export class PlatoEntity {
     nombre: string;
 
     @Column()
-    direccion: string;
+    descripcion: string;
 
-    @Column()
-    tipoCocina: string;
+    @Column('float')
+    precio: number;
 
-    @Column()
-    paginaWeb: string;
+    @Column({
+        type: 'enum',
+        enum: CategoriaPlato,
+        default: CategoriaPlato.PLATO_FUERTE
+    })
+    categoria: CategoriaPlato;
+
 
     @ManyToMany(() => RestauranteEntity, restaurante => restaurante.platos)
     restaurantes: RestauranteEntity[];
