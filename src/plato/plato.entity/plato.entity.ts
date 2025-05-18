@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { RestauranteEntity } from 'src/restaurante/restaurante.entity/restaurante.entity';
+import { RestauranteEntity } from '../../restaurante/restaurante.entity/restaurante.entity';
 import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 export enum CategoriaPlato {
@@ -25,7 +25,7 @@ export class PlatoEntity {
     precio: number;
 
     @Column({
-        type: 'enum',
+        type: 'text',
         enum: CategoriaPlato
     })
     categoria: CategoriaPlato;

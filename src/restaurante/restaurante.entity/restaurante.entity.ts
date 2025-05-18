@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { PlatoEntity } from 'src/plato/plato.entity/plato.entity';
+import { PlatoEntity } from '../../plato/plato.entity/plato.entity';
 
 export enum TipoCocina {
     ITALIANA = 'Italiana',
@@ -24,7 +24,7 @@ export class RestauranteEntity {
     direccion: string;
 
     @Column({
-        type: 'enum',
+        type: 'text',
         enum: TipoCocina
     })
     tipoCocina: TipoCocina;

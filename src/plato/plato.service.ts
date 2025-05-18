@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { PlatoEntity, CategoriaPlato } from './plato.entity/plato.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { BusinessError, BusinessLogicException } from 'src/shared/errors/business-erros';
+import { BusinessError, BusinessLogicException } from '../shared/errors/business-erros';
 
 @Injectable()
 export class PlatoService {
