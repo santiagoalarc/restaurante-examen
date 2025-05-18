@@ -26,8 +26,7 @@ export class PlatoEntity {
 
     @Column({
         type: 'enum',
-        enum: CategoriaPlato,
-        default: CategoriaPlato.PLATO_FUERTE
+        enum: CategoriaPlato
     })
     categoria: CategoriaPlato;
 
