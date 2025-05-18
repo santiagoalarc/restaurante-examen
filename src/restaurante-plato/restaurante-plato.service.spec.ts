@@ -11,7 +11,6 @@ import {
 } from '../plato/plato.entity/plato.entity';
 import { Repository } from 'typeorm';
 import { TypeOrmTestingConfig } from '../shared/testing-utils/typeorm-testing-config';
-import { BusinessLogicException } from '../shared/errors/business-erros';
 
 describe('RestaurantePlatoService', () => {
   let service: RestaurantePlatoService;

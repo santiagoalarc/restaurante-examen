@@ -1,4 +1,46 @@
-import { Controller } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  Param,
+  Post,
+  Put,
+  UseInterceptors,
+} from '@nestjs/common';
+import { BusinessErrorsInterceptor } from 'src/shared/interceptors/business-errors/business-errors.interceptor';
+import { PlatoService } from './plato.service';
+import { PlatoEntity } from './plato.entity/plato.entity';
 
 @Controller('plato')
-export class PlatoController {}
+@UseInterceptors(BusinessErrorsInterceptor)
+export class PlatoController {
+  constructor(private readonly platoService: PlatoService) {}
+
+  @Get()
+  async findAll() {
+    return await this.platoService.findAll();
+  }
+
+  @Get(':id')
+  async findOne(@Param('id') platoId: string) {
+    return await this.platoService.findOne(platoId);
+  }
+
+  @Post()
+  async create(@Body() plato: PlatoEntity) {
+    return await this.platoService.create(plato);
+  }
+
+  @Put(':id')
+  async update(@Param('id') platoId: string, @Body() plato: PlatoEntity) {
+    return await this.platoService.update(platoId, plato);
+  }
+
+  @Delete(':id')
+  @HttpCode(204)
+  async delete(@Param('id') platoId: string) {
+    return await this.platoService.remove(platoId);
+  }
+}
