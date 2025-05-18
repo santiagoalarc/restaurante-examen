@@ -7,6 +7,7 @@ import { PlatoEntity } from './plato/plato.entity/plato.entity';
 import { PlatoModule } from './plato/plato.module';
 import { RestauranteEntity } from './restaurante/restaurante.entity/restaurante.entity';
 import { RestauranteModule } from './restaurante/restaurante.module';
+import { RestaurantePlatoModule } from './restaurante-plato/restaurante-plato.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { RestauranteModule } from './restaurante/restaurante.module';
     }),
     RestauranteModule,
     PlatoModule,
+    RestaurantePlatoModule,
   ],
   controllers: [AppController],
   providers: [AppService],
