@@ -1,160 +1,107 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { PlatoEntity } from '../plato/plato.entity/plato.entity';
-import { RestauranteEntity } from '../restaurante/restaurante.entity/restaurante.entity';
-import { Repository } from 'typeorm/repository/Repository';
+import { Test, TestingModule } from '@nestjs/testing';
+import { RestaurantePlatoService } from './restaurante-plato.service';
 import {
-  BusinessLogicException,
-  BusinessError,
-} from '../shared/errors/business-erros';
+  RestauranteEntity,
+  TipoCocina,
+} from '../restaurante/restaurante.entity/restaurante.entity';
+import { getRepositoryToken } from '@nestjs/typeorm';
+import {
+  CategoriaPlato,
+  PlatoEntity,
+} from '../plato/plato.entity/plato.entity';
+import { Repository } from 'typeorm';
+import { TypeOrmTestingConfig } from '../shared/testing-utils/typeorm-testing-config';
+import { BusinessLogicException } from '../shared/errors/business-erros';
 
-@Injectable()
-export class RestaurantePlatoService {
-  constructor(
-    @InjectRepository(RestauranteEntity)
-    private readonly restauranteRepository: Repository<RestauranteEntity>,
-    @InjectRepository(PlatoEntity)
-    private readonly platoRepository: Repository<PlatoEntity>,
-  ) {}
+describe('RestaurantePlatoService', () => {
+  let service: RestaurantePlatoService;
+  let restauranteRepository: Repository<RestauranteEntity>;
+  let platoRepository: Repository<PlatoEntity>;
+  let restaurantesList: RestauranteEntity[];
+  let platosList: PlatoEntity[];
 
-  async addPlatoToRestaurante(
-    restauranteId: string,
-    platoId: string,
-  ): Promise<RestauranteEntity> {
-    const restaurante = await this.restauranteRepository.findOne({
-      where: { id: restauranteId },
-      relations: ['platos'],
-    });
-    if (!restaurante) {
-      throw new BusinessLogicException(
-        `El restaurante con id ${restauranteId} no fue encontrado`,
-        BusinessError.NOT_FOUND,
-      );
-    }
+  beforeEach(async () => {
+    const module: TestingModule = await Test.createTestingModule({
+      imports: [...TypeOrmTestingConfig()],
+      providers: [RestaurantePlatoService],
+    }).compile();
 
-    const plato = await this.platoRepository.findOne({
-      where: { id: platoId },
-    });
-    if (!plato) {
-      throw new BusinessLogicException(
-        `El plato con id ${platoId} no fue encontrado`,
-        BusinessError.NOT_FOUND,
-      );
-    }
-
-    restaurante.platos = [...restaurante.platos, plato];
-    return this.restauranteRepository.save(restaurante);
-  }
-
-  async findPlatosFromRestaurante(
-    restauranteId: string,
-  ): Promise<PlatoEntity[]> {
-    const restaurante = await this.restauranteRepository.findOne({
-      where: { id: restauranteId },
-      relations: ['platos'],
-    });
-    if (!restaurante) {
-      throw new BusinessLogicException(
-        `El restaurante con id ${restauranteId} no fue encontrado`,
-        BusinessError.NOT_FOUND,
-      );
-    }
-    return restaurante.platos;
-  }
-
-  async findPlatoFromRestaurante(
-    restauranteId: string,
-    platoId: string,
-  ): Promise<PlatoEntity> {
-    const restaurante = await this.restauranteRepository.findOne({
-      where: { id: restauranteId },
-      relations: ['platos'],
-    });
-    if (!restaurante) {
-      throw new BusinessLogicException(
-        `El restaurante con id ${restauranteId} no fue encontrado`,
-        BusinessError.NOT_FOUND,
-      );
-    }
-
-    const plato = await this.platoRepository.findOne({
-      where: { id: platoId },
-    });
-    if (!plato) {
-      throw new BusinessLogicException(
-        `El plato con id ${platoId} no fue encontrado`,
-        BusinessError.NOT_FOUND,
-      );
-    }
-
-    const restaurantePlato = restaurante.platos.find((p) => p.id === plato.id);
-    if (!restaurantePlato) {
-      throw new BusinessLogicException(
-        `El plato con id ${platoId} no está asociado al restaurante con id ${restauranteId}`,
-        BusinessError.NOT_FOUND,
-      );
-    }
-    return restaurantePlato;
-  }
-
-  async updatePlatoFromRestaurante(
-    restauranteId: string,
-    platoId: string,
-    plato: PlatoEntity,
-  ): Promise<RestauranteEntity> {
-    const restaurante = await this.restauranteRepository.findOne({
-      where: { id: restauranteId },
-      relations: ['platos'],
-    });
-    if (!restaurante) {
-      throw new BusinessLogicException(
-        `El restaurante con id ${restauranteId} no fue encontrado`,
-        BusinessError.NOT_FOUND,
-      );
-    }
-
-    const platoToUpdate = await this.platoRepository.findOne({
-      where: { id: platoId },
-    });
-    if (!platoToUpdate) {
-      throw new BusinessLogicException(
-        `El plato con id ${platoId} no fue encontrado`,
-        BusinessError.NOT_FOUND,
-      );
-    }
-
-    restaurante.platos = restaurante.platos.map((p) =>
-      p.id === platoId ? plato : p,
+    service = module.get<RestaurantePlatoService>(RestaurantePlatoService);
+    restauranteRepository = module.get<Repository<RestauranteEntity>>(
+      getRepositoryToken(RestauranteEntity),
     );
-    return this.restauranteRepository.save(restaurante);
-  }
+    platoRepository = module.get<Repository<PlatoEntity>>(
+      getRepositoryToken(PlatoEntity),
+    );
 
-  async deletePlatoFromRestaurante(
-    restauranteId: string,
-    platoId: string,
-  ): Promise<RestauranteEntity> {
-    const restaurante = await this.restauranteRepository.findOne({
-      where: { id: restauranteId },
-      relations: ['platos'],
-    });
-    if (!restaurante) {
-      throw new BusinessLogicException(
-        `El restaurante con id ${restauranteId} no fue encontrado`,
-        BusinessError.NOT_FOUND,
-      );
+    await seedDatabase();
+  });
+
+  const seedDatabase = async () => {
+    await restauranteRepository.clear();
+    await platoRepository.clear();
+
+    restaurantesList = [];
+    platosList = [];
+    for (let i = 0; i < 5; i++) {
+      const restaurante: RestauranteEntity = await restauranteRepository.save({
+        id: `${i}`,
+        nombre: `Restaurante ${i}`,
+        direccion: `Dirección ${i}`,
+        tipoCocina: TipoCocina.ITALIANA,
+        paginaWeb: `www.restaurante${i}.com`,
+      });
+      restaurantesList.push(restaurante);
     }
-
-    const plato = await this.platoRepository.findOne({
-      where: { id: platoId },
-    });
-    if (!plato) {
-      throw new BusinessLogicException(
-        `El plato con id ${platoId} no fue encontrado`,
-        BusinessError.NOT_FOUND,
-      );
+    for (let i = 0; i < 5; i++) {
+      const plato: PlatoEntity = await platoRepository.save({
+        id: `${i}`,
+        nombre: `Plato ${i}`,
+        descripcion: `Descripción ${i}`,
+        precio: 10 + i,
+        categoria: CategoriaPlato.ENTRADA,
+      });
+      platosList.push(plato);
     }
+  };
+  it('should be defined', () => {
+    expect(service).toBeDefined();
+  });
 
-    restaurante.platos = restaurante.platos.filter((p) => p.id !== platoId);
-    return this.restauranteRepository.save(restaurante);
-  }
-}
+  it('addPlatoToRestaurante should add a plato to a restaurante', async () => {
+    const plato = platosList[0];
+    const restaurante = restaurantesList[0];
+
+    const result = await service.addPlatoToRestaurante(
+      restaurante.id,
+      plato.id,
+    );
+
+    expect(result.platos).toContainEqual(plato);
+  });
+
+  it('findPlatosFromRestaurante should return platos from a restaurante', async () => {
+    const restaurante = restaurantesList[0];
+    const plato = platosList[0];
+
+    await service.addPlatoToRestaurante(restaurante.id, plato.id);
+
+    const result = await service.findPlatosFromRestaurante(restaurante.id);
+
+    expect(result).toContainEqual(plato);
+  });
+
+  it('findPlatoFromRestaurante should return a plato from a restaurante', async () => {
+    const restaurante = restaurantesList[0];
+    const plato = platosList[0];
+
+    await service.addPlatoToRestaurante(restaurante.id, plato.id);
+
+    const result = await service.findPlatoFromRestaurante(
+      restaurante.id,
+      plato.id,
+    );
+
+    expect(result).toMatchObject(plato);
+  });
+});
