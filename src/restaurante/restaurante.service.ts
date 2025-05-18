@@ -21,7 +21,7 @@ export class RestauranteService {
     const tipoCocina = Object.values(TipoCocina);
     if (!tipoCocina.includes(restaurante.tipoCocina)) {
       throw new BusinessLogicException(
-        `La categoría '${restaurante.tipoCocina}' no es válida.`,
+        `El tipo de cocina '${restaurante.tipoCocina}' no es válida.`,
         BusinessError.BAD_REQUEST,
       );
     }

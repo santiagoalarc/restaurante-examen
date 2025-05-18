@@ -129,6 +129,36 @@ export class RestaurantePlatoService {
     return this.restauranteRepository.save(restaurante);
   }
 
+  async updatePlatosFromRestaurante(
+    restauranteId: string,
+    platos: PlatoEntity[],
+  ): Promise<RestauranteEntity> {
+    const restaurante = await this.restauranteRepository.findOne({
+      where: { id: restauranteId },
+      relations: ['platos'],
+    });
+    if (!restaurante) {
+      throw new BusinessLogicException(
+        `El restaurante con id ${restauranteId} no fue encontrado`,
+        BusinessError.NOT_FOUND,
+      );
+    }
+
+    for (const plato of platos) {
+      const platoToUpdate = await this.platoRepository.findOne({
+        where: { id: plato.id },
+      });
+      if (!platoToUpdate) {
+        throw new BusinessLogicException(
+          `El plato con id ${plato.id} no fue encontrado`,
+          BusinessError.NOT_FOUND,
+        );
+      }
+    }
+    restaurante.platos = platos;
+    return this.restauranteRepository.save(restaurante);
+  }
+
   async deletePlatoFromRestaurante(
     restauranteId: string,
     platoId: string,

@@ -37,7 +37,7 @@ export class PlatoService {
 
     async update(id: string, plato: PlatoEntity): Promise<PlatoEntity> {
         const categoriasValidas = Object.values(CategoriaPlato);
-        const existingPlato = await this.findOne(id);
+        const existingPlato = await this.platoRepository.findOne({where: {id}});
         if (!existingPlato) {
             throw new BusinessLogicException(`El plato con id ${id} no fue encontrado`, BusinessError.NOT_FOUND);
         }

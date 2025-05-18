@@ -1,0 +1,610 @@
+{
+	"info": {
+		"_postman_id": "2a71105e-ef17-4228-a9db-b12bd8e0b81b",
+		"name": "Examen",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "44859486"
+	},
+	"item": [
+		{
+			"name": "Platos",
+			"item": [
+				{
+					"name": "Crear un plato válido",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nombre\": \"Plato1\",\n    \"descripcion\": \"descripcion\",\n    \"precio\": 500,\n    \"categoria\": \"entrada\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/dishes",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"dishes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Crear un plato inválido",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nombre\": \"Plato1\",\n    \"descripcion\": \"descripcion\",\n    \"precio\": 500,\n    \"categoria\": \"exotico\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/dishes",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"dishes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Todos los platos",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nombre\": \"Mondongos\",\n    \"direccion\": \"Calle 12 34 - 67\",\n    \"tipoCocina\": \"Chilena\",\n    \"paginaWeb\": \"www.mondongos.com\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/dishes",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"dishes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Un plato por id",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nombre\": \"Mondongos\",\n    \"direccion\": \"Calle 12 34 - 67\",\n    \"tipoCocina\": \"Chilena\",\n    \"paginaWeb\": \"www.mondongos.com\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/dishes/{{dishId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"dishes",
+								"{{dishId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Un plato por id invalido",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nombre\": \"Mondongos\",\n    \"direccion\": \"Calle 12 34 - 67\",\n    \"tipoCocina\": \"Chilena\",\n    \"paginaWeb\": \"www.mondongos.com\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/dishes/{{dishIdInvalid}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"dishes",
+								"{{dishIdInvalid}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Actualizar un plato",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nombre\": \"Plato1 Actualizado\",\n    \"descripcion\": \"descripcion\",\n    \"precio\": 500,\n    \"categoria\": \"entrada\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/dishes/{{dishId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"dishes",
+								"{{dishId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Actualizar un plato id no existente",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nombre\": \"Plato1 Actualizado\",\n    \"descripcion\": \"descripcion\",\n    \"precio\": 500,\n    \"categoria\": \"entrada\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/dishes/{{dishIdInvalid}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"dishes",
+								"{{dishIdInvalid}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar un plato por id",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nombre\": \"Mondongos\",\n    \"direccion\": \"Calle 12 34 - 67\",\n    \"tipoCocina\": \"Chilena\",\n    \"paginaWeb\": \"www.mondongos.com\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/dishes/{{dishId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"dishes",
+								"{{dishId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar un plato por id invalido",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nombre\": \"Mondongos\",\n    \"direccion\": \"Calle 12 34 - 67\",\n    \"tipoCocina\": \"Chilena\",\n    \"paginaWeb\": \"www.mondongos.com\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/dishes/{{dishIdInvalid}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"dishes",
+								"{{dishIdInvalid}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Restaurante",
+			"item": [
+				{
+					"name": "Crear un restaurante válido",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nombre\": \"Mondongos\",\n    \"direccion\": \"Calle 12 34 - 67\",\n    \"tipoCocina\": \"Colombiana\",\n    \"paginaWeb\": \"www.mondongos.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/restaurants",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"restaurants"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Crear un restaurante inválido",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nombre\": \"Mondongos\",\n    \"direccion\": \"Calle 12 34 - 67\",\n    \"tipoCocina\": \"Chilena\",\n    \"paginaWeb\": \"www.mondongos.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/restaurants",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"restaurants"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Todos los restaurantes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/restaurants",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"restaurants"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Un restaurante por id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/restaurants/{{restaurantId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"restaurants",
+								"{{restaurantId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Un restaurante por id invalido",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/restaurants/{{restaurantIdInvalid}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"restaurants",
+								"{{restaurantIdInvalid}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Actualizar Restaurante",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nombre\": \"Mondongos Actuliazado\",\n    \"direccion\": \"Calle 12 34 - 67\",\n    \"tipoCocina\": \"Colombiana\",\n    \"paginaWeb\": \"www.mondongos.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/restaurants/{{restaurantId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"restaurants",
+								"{{restaurantId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Actualizar Restaurante id no existente",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nombre\": \"Mondongos Actuliazado\",\n    \"direccion\": \"Calle 12 34 - 67\",\n    \"tipoCocina\": \"Colombiana\",\n    \"paginaWeb\": \"www.mondongos.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/restaurants/{{restaurantIdInvalid}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"restaurants",
+								"{{restaurantIdInvalid}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar restaurante por id",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/restaurants/{{restaurantId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"restaurants",
+								"{{restaurantId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar restaurante por id invalido",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/restaurants/{{restaurantIdInvalid}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"restaurants",
+								"{{restaurantIdInvalid}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Restaurant-plato",
+			"item": [
+				{
+					"name": "Asociar un plato a un restaurante",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/restaurants/{{restaurantId}}/dishes/{{dishId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"restaurants",
+								"{{restaurantId}}",
+								"dishes",
+								"{{dishId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Asociar un plato no existente a un restaurante Copy",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/restaurants/{{restaurantId}}/dishes/{{dishIdInvalid}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"restaurants",
+								"{{restaurantId}}",
+								"dishes",
+								"{{dishIdInvalid}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Todos los platos en un restaurante",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nombre\": \"Mondongos\",\n    \"direccion\": \"Calle 12 34 - 67\",\n    \"tipoCocina\": \"Chilena\",\n    \"paginaWeb\": \"www.mondongos.com\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/restaurants/{{restaurantId}}/dishes",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"restaurants",
+								"{{restaurantId}}",
+								"dishes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Un plato asociado a un restaurantes",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nombre\": \"Mondongos\",\n    \"direccion\": \"Calle 12 34 - 67\",\n    \"tipoCocina\": \"Chilena\",\n    \"paginaWeb\": \"www.mondongos.com\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/restaurants/{{restaurantId}}/dishes/{{dishId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"restaurants",
+								"{{restaurantId}}",
+								"dishes",
+								"{{dishId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Un plato asociado a un restaurantes Copy",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nombre\": \"Mondongos\",\n    \"direccion\": \"Calle 12 34 - 67\",\n    \"tipoCocina\": \"Chilena\",\n    \"paginaWeb\": \"www.mondongos.com\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/restaurants/{{restaurantId}}/dishes/{{dishIdInvalid}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"restaurants",
+								"{{restaurantId}}",
+								"dishes",
+								"{{dishIdInvalid}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

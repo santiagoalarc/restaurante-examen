@@ -9,9 +9,11 @@ import {
   Put,
   UseInterceptors,
 } from '@nestjs/common';
-import { BusinessErrorsInterceptor } from 'src/shared/interceptors/business-errors/business-errors.interceptor';
+import { BusinessErrorsInterceptor } from 'src/shared/interceptors/business-errors.interceptor';
 import { PlatoService } from './plato.service';
 import { PlatoEntity } from './plato.entity/plato.entity';
+import { PlatoDto } from './plato.dto/plato.dto';
+import { plainToInstance } from 'class-transformer';
 
 @Controller('dishes')
 @UseInterceptors(BusinessErrorsInterceptor)
@@ -29,12 +31,14 @@ export class PlatoController {
   }
 
   @Post()
-  async create(@Body() plato: PlatoEntity) {
+  async create(@Body() platoDto: PlatoDto) {
+    const plato: PlatoEntity = plainToInstance(PlatoEntity, platoDto);
     return await this.platoService.create(plato);
   }
 
   @Put(':id')
-  async update(@Param('id') platoId: string, @Body() plato: PlatoEntity) {
+  async update(@Param('id') platoId: string, @Body() platoDto: PlatoDto) {
+    const plato: PlatoEntity = plainToInstance(PlatoEntity, platoDto);
     return await this.platoService.update(platoId, plato);
   }
 
