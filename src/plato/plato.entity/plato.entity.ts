@@ -12,7 +12,7 @@ export enum CategoriaPlato {
 @Entity()
 export class PlatoEntity {
 
-    @PrimaryGeneratedColumn('uuid')
+    @PrimaryGeneratedColumn()
     id: string;
 
     @Column()

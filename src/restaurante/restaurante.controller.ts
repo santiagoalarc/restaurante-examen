@@ -13,7 +13,7 @@ import { BusinessErrorsInterceptor } from 'src/shared/interceptors/business-erro
 import { RestauranteService } from './restaurante.service';
 import { RestauranteEntity } from './restaurante.entity/restaurante.entity';
 
-@Controller('restaurante')
+@Controller('restaurants')
 @UseInterceptors(BusinessErrorsInterceptor)
 export class RestauranteController {
   constructor(private readonly restauranteService: RestauranteService) {}

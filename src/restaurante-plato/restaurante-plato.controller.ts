@@ -10,14 +10,14 @@ import {
 import { BusinessErrorsInterceptor } from 'src/shared/interceptors/business-errors/business-errors.interceptor';
 import { RestaurantePlatoService } from './restaurante-plato.service';
 
-@Controller('restaurante-plato')
+@Controller('restaurants')
 @UseInterceptors(BusinessErrorsInterceptor)
 export class RestaurantePlatoController {
   constructor(
     private readonly restaurantePlatoService: RestaurantePlatoService,
   ) {}
 
-  @Post(':restauranteId/plato/:platoId')
+  @Post(':restauranteId/dishes/:platoId')
   async addPlatoToRestaurante(
     @Param('restauranteId') restauranteId: string,
     @Param('platoId') platoId: string,
@@ -28,7 +28,7 @@ export class RestaurantePlatoController {
     );
   }
 
-  @Get(':restauranteId/plato')
+  @Get(':restauranteId/dishes')
   async findPlatosFromRestaurante(
     @Param('restauranteId') restauranteId: string,
   ) {
@@ -37,7 +37,7 @@ export class RestaurantePlatoController {
     );
   }
 
-  @Get(':restauranteId/plato/:platoId')
+  @Get(':restauranteId/dishes/:platoId')
   async findPlatoFromRestaurante(
     @Param('restauranteId') restauranteId: string,
     @Param('platoId') platoId: string,
@@ -48,7 +48,7 @@ export class RestaurantePlatoController {
     );
   }
 
-  @Delete(':restauranteId/plato/:platoId')
+  @Delete(':restauranteId/dishes/:platoId')
   @HttpCode(204)
   async deletePlatoFromRestaurante(
     @Param('restauranteId') restauranteId: string,

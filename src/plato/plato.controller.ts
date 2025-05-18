@@ -13,7 +13,7 @@ import { BusinessErrorsInterceptor } from 'src/shared/interceptors/business-erro
 import { PlatoService } from './plato.service';
 import { PlatoEntity } from './plato.entity/plato.entity';
 
-@Controller('plato')
+@Controller('dishes')
 @UseInterceptors(BusinessErrorsInterceptor)
 export class PlatoController {
   constructor(private readonly platoService: PlatoService) {}

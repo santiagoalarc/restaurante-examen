@@ -14,7 +14,7 @@ export enum TipoCocina {
 @Entity()
 export class RestauranteEntity {
 
-    @PrimaryGeneratedColumn('uuid')
+    @PrimaryGeneratedColumn()
     id: string;
 
     @Column()
