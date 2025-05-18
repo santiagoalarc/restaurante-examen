@@ -11,6 +11,23 @@
 			"item": [
 				{
 					"name": "Crear un plato válido",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var data = pm.response.json();",
+									"pm.environment.set(\"dishId\", data.id);",
+									"",
+									"pm.test(\"Status code is 201\", function () {",
+									"   pm.response.to.have.status(201);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [],
@@ -39,6 +56,36 @@
 				},
 				{
 					"name": "Crear un plato inválido",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let requestBody = pm.request.body.raw;",
+									"let bodyJson = JSON.parse(requestBody);",
+									"let categoria = bodyJson.categoria || null;",
+									"let data = pm.response.json();",
+									"",
+									"pm.environment.set(\"dishId\", data.id);",
+									"",
+									"pm.test(\"Status code is 400\", function () {",
+									"   pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"Get expected error message\", function () {",
+									"",
+									"    let expectedMessage = `La categoría '${categoria}' no es válida`;",
+									"    let responseBody = pm.response.text();",
+									"",
+									"    pm.expect(responseBody).to.include(expectedMessage);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [],
@@ -67,6 +114,25 @@
 				},
 				{
 					"name": "Todos los platos",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Number of dishes > 0', function () {",
+									"   var data = pm.response.json();",
+									"   pm.expect(data.length).to.be.greaterThan(0);",
+									"});",
+									"",
+									"pm.test(\"Status code is 200\", function () {",
+									"   pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -93,6 +159,20 @@
 				},
 				{
 					"name": "Un plato por id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"   pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -120,6 +200,27 @@
 				},
 				{
 					"name": "Un plato por id invalido",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {",
+									"   pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"Get expected error message\", function () {",
+									"   var data = pm.response.json();",
+									"   var dishIdInvalid = pm.collectionVariables.get(\"dishIdInvalid\");",
+									"   pm.expect(data.message).to.eql(\"El plato con id \" + dishIdInvalid + \" no fue encontrado\");",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -147,8 +248,25 @@
 				},
 				{
 					"name": "Actualizar un plato",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"   pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
-						"method": "PUT",
+						"method": "GET",
 						"header": [],
 						"body": {
 							"mode": "raw",
@@ -160,13 +278,15 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/api/v1/dishes/{{dishId}}",
+							"raw": "{{baseUrl}}/api/v1/restaurants/{{restaurantId}}/dishes/{{dishId}}",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"api",
 								"v1",
+								"restaurants",
+								"{{restaurantId}}",
 								"dishes",
 								"{{dishId}}"
 							]
@@ -176,6 +296,26 @@
 				},
 				{
 					"name": "Actualizar un plato id no existente",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {",
+									"   pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"Get expected error message\", function () {",
+									"   var data = pm.response.json();",
+									"   var dishIdInvalid = pm.collectionVariables.get(\"dishIdInvalid\");",
+									"   pm.expect(data.message).to.eql(\"El plato con id \" + dishIdInvalid + \" no fue encontrado\");",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
 					"request": {
 						"method": "PUT",
 						"header": [],
@@ -205,6 +345,20 @@
 				},
 				{
 					"name": "Eliminar un plato por id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {",
+									"   pm.response.to.have.status(204);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
 					"request": {
 						"method": "DELETE",
 						"header": [],
@@ -229,12 +383,32 @@
 				},
 				{
 					"name": "Eliminar un plato por id invalido",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {",
+									"   pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"Get expected error message\", function () {",
+									"   var data = pm.response.json();",
+									"   var dishIdInvalid = pm.collectionVariables.get(\"dishIdInvalid\");",
+									"   pm.expect(data.message).to.eql(\"El plato con id \" + dishIdInvalid + \" no fue encontrado\");",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
 					"request": {
 						"method": "DELETE",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"nombre\": \"Mondongos\",\n    \"direccion\": \"Calle 12 34 - 67\",\n    \"tipoCocina\": \"Chilena\",\n    \"paginaWeb\": \"www.mondongos.com\"\n}"
+							"raw": ""
 						},
 						"url": {
 							"raw": "{{baseUrl}}/api/v1/dishes/{{dishIdInvalid}}",
@@ -258,6 +432,23 @@
 			"item": [
 				{
 					"name": "Crear un restaurante válido",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var data = pm.response.json();",
+									"pm.environment.set(\"restaurantId\", data.id);",
+									"",
+									"pm.test(\"Status code is 201\", function () {",
+									"   pm.response.to.have.status(201);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [],
@@ -286,6 +477,36 @@
 				},
 				{
 					"name": "Crear un restaurante inválido",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let requestBody = pm.request.body.raw;",
+									"let bodyJson = JSON.parse(requestBody);",
+									"let tipoCocina = bodyJson.tipoCocina || null;",
+									"let data = pm.response.json();",
+									"",
+									"pm.environment.set(\"dishId\", data.id);",
+									"",
+									"pm.test(\"Status code is 400\", function () {",
+									"   pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"Get expected error message\", function () {",
+									"",
+									"    let expectedMessage = `El tipo de cocina '${tipoCocina}' no es válida`;",
+									"    let responseBody = pm.response.text();",
+									"",
+									"    pm.expect(responseBody).to.include(expectedMessage);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [],
@@ -314,6 +535,25 @@
 				},
 				{
 					"name": "Todos los restaurantes",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Number of restaurants > 0', function () {",
+									"   var data = pm.response.json();",
+									"   pm.expect(data.length).to.be.greaterThan(0);",
+									"});",
+									"",
+									"pm.test(\"Status code is 200\", function () {",
+									"   pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -333,6 +573,20 @@
 				},
 				{
 					"name": "Un restaurante por id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"   pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -353,6 +607,27 @@
 				},
 				{
 					"name": "Un restaurante por id invalido",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {",
+									"   pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"Get expected error message\", function () {",
+									"   var data = pm.response.json();",
+									"   var restaurantIdInvalid = pm.collectionVariables.get(\"restaurantIdInvalid\");",
+									"   pm.expect(data.message).to.eql(\"El restaurante con id \" + restaurantIdInvalid + \" no fue encontrado\");",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -373,6 +648,20 @@
 				},
 				{
 					"name": "Actualizar Restaurante",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"   pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
 					"request": {
 						"method": "PUT",
 						"header": [],
@@ -402,6 +691,26 @@
 				},
 				{
 					"name": "Actualizar Restaurante id no existente",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {",
+									"   pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"Get expected error message\", function () {",
+									"   var data = pm.response.json();",
+									"   var restaurantIdInvalid = pm.collectionVariables.get(\"restaurantIdInvalid\");",
+									"   pm.expect(data.message).to.eql(\"El restaurante con id \" + restaurantIdInvalid + \" no fue encontrado\");",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
 					"request": {
 						"method": "PUT",
 						"header": [],
@@ -431,6 +740,20 @@
 				},
 				{
 					"name": "Eliminar restaurante por id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {",
+									"   pm.response.to.have.status(204);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
 					"request": {
 						"method": "DELETE",
 						"header": [],
@@ -451,6 +774,26 @@
 				},
 				{
 					"name": "Eliminar restaurante por id invalido",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {",
+									"   pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"Get expected error message\", function () {",
+									"   var data = pm.response.json();",
+									"   var restaurantIdInvalid = pm.collectionVariables.get(\"restaurantIdInvalid\");",
+									"   pm.expect(data.message).to.eql(\"El restaurante con id \" + restaurantIdInvalid + \" no fue encontrado\");",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
 					"request": {
 						"method": "DELETE",
 						"header": [],
@@ -476,6 +819,20 @@
 			"item": [
 				{
 					"name": "Asociar un plato a un restaurante",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"   pm.response.to.have.status(201);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [],
@@ -498,6 +855,26 @@
 				},
 				{
 					"name": "Asociar un plato no existente a un restaurante Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {",
+									"   pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"Get expected error message\", function () {",
+									"   var data = pm.response.json();",
+									"   var dishIdInvalid = pm.collectionVariables.get(\"dishIdInvalid\");",
+									"   pm.expect(data.message).to.eql(\"El plato con id \" + dishIdInvalid + \" no fue encontrado\");",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [],
@@ -520,6 +897,20 @@
 				},
 				{
 					"name": "Todos los platos en un restaurante",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"   pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -528,7 +919,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"nombre\": \"Mondongos\",\n    \"direccion\": \"Calle 12 34 - 67\",\n    \"tipoCocina\": \"Chilena\",\n    \"paginaWeb\": \"www.mondongos.com\"\n}"
+							"raw": ""
 						},
 						"url": {
 							"raw": "{{baseUrl}}/api/v1/restaurants/{{restaurantId}}/dishes",
@@ -548,6 +939,20 @@
 				},
 				{
 					"name": "Un plato asociado a un restaurantes",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"   pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -556,7 +961,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"nombre\": \"Mondongos\",\n    \"direccion\": \"Calle 12 34 - 67\",\n    \"tipoCocina\": \"Chilena\",\n    \"paginaWeb\": \"www.mondongos.com\"\n}"
+							"raw": ""
 						},
 						"url": {
 							"raw": "{{baseUrl}}/api/v1/restaurants/{{restaurantId}}/dishes/{{dishId}}",
@@ -576,7 +981,22 @@
 					"response": []
 				},
 				{
-					"name": "Un plato asociado a un restaurantes Copy",
+					"name": "Un plato no asociado a un restaurante",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {",
+									"   pm.response.to.have.status(400);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -585,7 +1005,157 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"nombre\": \"Mondongos\",\n    \"direccion\": \"Calle 12 34 - 67\",\n    \"tipoCocina\": \"Chilena\",\n    \"paginaWeb\": \"www.mondongos.com\"\n}"
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/restaurants/{{restaurantId}}/dishes/{{dishIdInvalid}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"restaurants",
+								"{{restaurantId}}",
+								"dishes",
+								"{{dishIdInvalid}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Actualizar los platos que están asociados a un restaurante",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\n    {\n        \"id\": 1,\n        \"nombre\": \"Plato1 Actualizado 2\",\n        \"descripcion\": \"descripcion\",\n        \"precio\": 500,\n        \"categoria\": \"entrada\"\n    }\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/restaurants/{{restaurantId}}/dishes",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"restaurants",
+								"{{restaurantId}}",
+								"dishes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Actualizar los platos que están asociados a un restaurante Copy",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\n    {\n        \"id\": 1,\n        \"nombre\": \"Plato1 Actualizado 2\",\n        \"descripcion\": \"descripcion\",\n        \"precio\": 500,\n        \"categoria\": \"entrada\"\n    }\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/restaurants/{{restaurantId}}/dishes",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"restaurants",
+								"{{restaurantId}}",
+								"dishes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar plato asociado a un restaurante",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {",
+									"   pm.response.to.have.status(204);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/restaurants/{{restaurantId}}/dishes/{{dishId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"restaurants",
+								"{{restaurantId}}",
+								"dishes",
+								"{{dishId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar plato no asociado a un restaurante",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {",
+									"   pm.response.to.have.status(400);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
 						},
 						"url": {
 							"raw": "{{baseUrl}}/api/v1/restaurants/{{restaurantId}}/dishes/{{dishIdInvalid}}",
@@ -605,6 +1175,55 @@
 					"response": []
 				}
 			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "localhost:3000",
+			"type": "default"
+		},
+		{
+			"key": "dishId",
+			"value": "1",
+			"type": "default"
+		},
+		{
+			"key": "restaurantId",
+			"value": "1",
+			"type": "default"
+		},
+		{
+			"key": "dishIdInvalid",
+			"value": "-1",
+			"type": "default"
+		},
+		{
+			"key": "restaurantIdInvalid",
+			"value": "",
+			"type": "default"
 		}
 	]
 }

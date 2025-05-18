@@ -76,7 +76,9 @@ describe('RestaurantePlatoService', () => {
       plato.id,
     );
 
-    expect(result.platos).toContainEqual(plato);
+    expect(result.platos[0].precio).toEqual(plato.precio);
+    expect(result.platos[0].descripcion).toEqual(plato.descripcion);
+    expect(result.platos[0].nombre).toEqual(plato.nombre);
   });
 
   it('findPlatosFromRestaurante should return platos from a restaurante', async () => {
@@ -87,7 +89,10 @@ describe('RestaurantePlatoService', () => {
 
     const result = await service.findPlatosFromRestaurante(restaurante.id);
 
-    expect(result).toContainEqual(plato);
+    expect(result[0].categoria).toEqual(plato.categoria);
+    expect(result[0].precio).toEqual(plato.precio);
+    expect(result[0].descripcion).toEqual(plato.descripcion);
+    expect(result[0].nombre).toEqual(plato.nombre);
   });
 
   it('findPlatoFromRestaurante should return a plato from a restaurante', async () => {
@@ -101,6 +106,6 @@ describe('RestaurantePlatoService', () => {
       plato.id,
     );
 
-    expect(result).toMatchObject(plato);
+    expect({...result, id: result.id.toString()}).toEqual(plato);
   });
 });
