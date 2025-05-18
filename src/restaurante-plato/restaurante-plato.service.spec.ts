@@ -106,6 +106,6 @@ describe('RestaurantePlatoService', () => {
       plato.id,
     );
 
-    expect({...result, id: result.id.toString()}).toEqual(plato);
+    expect({ ...result, id: result.id.toString() }).toEqual(plato);
   });
 });
